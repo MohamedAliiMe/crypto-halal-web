@@ -112,8 +112,11 @@ export default function CurrencyDetails({
                 </TableCell>
                 <TableCell>
                   <p className="text-bold text-size16 capitalize">
-                    {Number.parseFloat(currencyDetails?.price_usd).toFixed(2)}{" "}
-                    {"$"}
+                    {currencyDetails?.price_usd != null
+                      ? `${Number.parseFloat(currencyDetails.price_usd).toFixed(
+                          2
+                        )} $`
+                      : "0"}
                   </p>
                 </TableCell>
                 <TableCell>
@@ -124,18 +127,21 @@ export default function CurrencyDetails({
                         : "text-red-500"
                     } text-size16 font-regular  capitalize bg-white p-2 w-[70px] rounded text-center`}
                   >
-                    {Number.parseFloat(
-                      currencyDetails?.percent_change_24h
-                    ).toFixed(2)}
+                    {currencyDetails?.percent_change_24h
+                      ? Number.parseFloat(
+                          currencyDetails.percent_change_24h
+                        ).toFixed(2)
+                      : "-"}
                   </p>
                 </TableCell>
                 <TableCell>
                   {" "}
                   <p className="font-regular text-size16 capitalize text-start">
-                    {Number.parseFloat(currencyDetails?.market_cap_usd).toFixed(
-                      2
-                    )}{" "}
-                    {"$"}
+                    {currencyDetails?.market_cap_usd != null
+                      ? `${Number.parseFloat(
+                          currencyDetails.market_cap_usd
+                        ).toFixed(2)} $`
+                      : "0"}
                   </p>
                 </TableCell>
                 <TableCell>
@@ -168,7 +174,9 @@ export default function CurrencyDetails({
             </h2>
           </div>
           <p className="text-size18 font-regular text-white w-full md:w-[50%] mt-8 leading-10">
-            {currencyDetails?.services}
+            {DOMPurify.sanitize(currencyDetails?.services, {
+              USE_PROFILES: { html: false },
+            })}
           </p>
         </div>
 
@@ -282,7 +290,7 @@ export default function CurrencyDetails({
         </div>
         {currentTab === "historicalData" ? (
           <HistoricalData
-            historical={currencyDetails.historical}
+            historical={currencyDetails?.historical}
             isLoading={isLoading}
           />
         ) : (
